@@ -59,6 +59,39 @@ class Usuario {
 
     }
 
+    // Actualizar tarea
+static async updateTask(idtasks, name, description) {
+    const connection = await db.createConnection();
+    const [result] = await connection.execute(
+        "UPDATE tasks SET name = ?, description = ? WHERE idtasks = ?",
+        [name, description, idtasks]
+    );
+    connection.end();
+
+    if (result.affectedRows === 0) {
+        throw new Error("No se encontró la tarea para actualizar");
+    }
+
+    return result;
+}
+
+// Eliminar tarea
+static async deleteTask(idtasks) {
+    const connection = await db.createConnection();
+    const [result] = await connection.execute(
+        "DELETE FROM tasks WHERE idtasks = ?",
+        [idtasks]
+    );
+    connection.end();
+
+    if (result.affectedRows === 0) {
+        throw new Error("No se encontró la tarea para eliminar");
+    }
+
+    return result;
+}
+
+
 }
 
 module.exports = Usuario;

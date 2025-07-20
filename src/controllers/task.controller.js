@@ -79,8 +79,37 @@ const getTastAll = async (req, res) => {
     }
 }
 
+const updateTask = async (req, res) => {
+    try {
+        const { idtasks } = req.params;
+        const { name, description } = req.body;
+
+        if (!name || !description) {
+            return res.status(400).json({ message: "Faltan campos obligatorios" });
+        }
+
+        const result = await Task.updateTask(idtasks, name, description);
+        return res.status(200).json({ message: "Tarea actualizada exitosamente", result });
+    } catch (error) {
+        return res.status(500).json({ message: "Error al actualizar tarea", error: error.message });
+    }
+};
+
+const deleteTask = async (req, res) => {
+    try {
+        const { idtasks } = req.params;
+
+        const result = await Task.deleteTask(idtasks);
+        return res.status(200).json({ message: "Tarea eliminada correctamente", result });
+    } catch (error) {
+        return res.status(500).json({ message: "Error al eliminar tarea", error: error.message });
+    }
+};
+
 module.exports = {
     create,
     getTaskById,
-    getTastAll
-}
+    getTastAll,
+    updateTask,
+    deleteTask
+};
